@@ -59,7 +59,7 @@ Software CAD
 (Tipo de projeção paralela)
 
 
-   Uma forma especial de projeção paralela em que os três eixos (x, y, z) são mostrados com o mesmo peso visual — normalmente em ângulos de 30° ou 120° entre si. Mantém as proporções e dá uma ilusão de profundidade.
+   Uma forma especial de projeção paralela em que os três eixos (x, y, z) são mostrados com o mesmo peso visual normalmente em ângulos de 30° ou 120° entre si. Mantém as proporções e dá uma ilusão de profundidade.
    
    Exemplos reais:
    
@@ -84,7 +84,7 @@ Jogo Hades
 
 ### 🔹 Projeção perspectiva
 
-   Os “raios” convergem em um ponto de fuga. Objetos mais distantes parecem menores — como vemos no mundo real. Isso cria uma sensação forte de profundidade.
+   Os “raios” convergem em um ponto de fuga. Objetos mais distantes parecem menores como vemos no mundo real. Isso cria uma sensação forte de profundidade.
    
    Exemplos reais:
    
