@@ -132,7 +132,7 @@ Primeiro eu uso uma função para iniciar as variáveis da struct do Bresenham.
 }
 </pre>
 
-Nao entendeu? leia a versão mais longa ou [clique aqui](###A-formula) para ir para os cálculos.
+Nao entendeu? leia a versão mais longa ou [clique aqui](#A-formula) para ir para os cálculos.
 
 <pre>
 dx = abs(x1 - x0)
