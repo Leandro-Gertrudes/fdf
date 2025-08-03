@@ -103,3 +103,138 @@ Jogo Hades
 ![csgo](https://i.pcmag.com/imagery/reviews/03aaBruU4YchhD6MkESCRns-6.fit_lim.size_925x520.v_1569469925.png)
 
 Counter Striker Global Offensive
+
+# Algoritmo de Bresenham
+
+O Algoritmo de Bresenham é uma calculo usado para desenhar linhas retas entre dois pontos em uma tela composta por pixels (ou coordenadas inteiras).
+
+Cada passo do algoritmo decide qual pixel pintar para formar a linha. Como a tela é uma grade de pixels, você precisa decidir quando andar na horizontal (x), quando subir/descer (y) e como controlar a inclinação da linha. Sem usar números de ponto flutuante, apenas adições, subtrações e comparações.
+
+Imagine que você está indo da esquerda para a direita (incrementando x). A cada passo, você precisa decidir:
+- Devo manter o mesmo y (mesma linha)?
+- Ou devo subir para a próxima linha (y+1)?
+
+![imagem](https://www.middle-engine.com/images/2020-07-28-bresenhams-line-algorithm/03_bresenham-12x12-example.gif)
+
+O algoritmo decide.
+
+Vamos estuda-lo:
+
+Primeiro eu uso uma função para iniciar as variáveis da struct do Bresenham.
+
+<pre>void	init_bresenham(t_bresenham *b, t_point a, t_point b_point)
+{
+	b->dx = abs(b_point.x - a.x);             // Distância em X
+	b->dy = abs(b_point.y - a.y);             // Distância em Y
+	b->sx = direction(a.x, b_point.x);        // Direção de X (1 ou -1)
+	b->sy = direction(a.y, b_point.y);        // Direção de Y (1 ou -1)
+	b->err = b->dx - b->dy;                   // Erro acumulado inicial
+}
+</pre>
+
+Nao entendeu? leia a versão mais longa ou [clique aqui](###A-formula) para ir para os cálculos.
+
+<pre>
+dx = abs(x1 - x0)
+
+Distância horizontal entre os dois pontos.
+Mede quantos passos a linha terá no eixo X.
+O abs() garante que o valor seja positivo, independentemente da direção.
+</pre>
+
+<pre>
+dy = abs(y1 - y0)
+   
+Distância vertical entre os dois pontos.
+Mede quantos passos a linha terá no eixo Y.
+Também é sempre positivo.
+</pre>
+
+<pre>
+sx = direction(x0, x1)
+   
+Direção no eixo X — para onde a linha caminha no eixo X.
++1 se a linha vai da esquerda para a direita
+-1 se vai da direita para a esquerda
+direction(a, b) é uma função sua que retorna 1 se b > a, senão -1.
+</pre>
+
+<pre>
+sy = direction(y0, y1)
+
+Direção no eixo Y — para onde a linha caminha no eixo Y.
++1 se a linha sobe
+-1 se a linha desce
+</pre>
+
+<pre>
+err = dx - dy
+
+Erro acumulado — essa é a “inteligência” do algoritmo.
+Controla quando você deve dar um passo em Y, enquanto anda em X (ou vice-versa).
+Se dx for maior que dy, significa que a linha é mais horizontal.
+A cada passo, err é ajustado para refletir o desvio entre a linha ideal (real, com floats) e a linha que você está desenhando (com pixels).
+</pre>
+
+<pre>
+e2 = 2 * err
+
+Erro dobrado — evita divisões, ajuda na decisão dos próximos passos.
+Usado para comparar com -dy e dx e decidir se vai mover em X e/ou Y.
+</pre>
+
+### A formula
+
+<pre>
+b_vars.e2 = 2 * b_vars.err;
+if (b_vars.e2 > -b_vars.dy)
+{
+   b_vars.err -= b_vars.dy;
+   a.x += b_vars.sx;
+}
+if (b_vars.e2 < b_vars.dx)
+{
+   b_vars.err += b_vars.dx;
+   a.y += b_vars.sy;
+}
+</pre>
+
+Explicação passo a passo
+### 🔹b_vars.e2 = 2 * b_vars.err;
+Multiplica o erro por 2 para evitar divisão ou ponto flutuante — isso segue a otimização do algoritmo original de Bresenham.
+
+
+### 🔹Primeiro if: decide se deve mover em X
+<pre>
+   if (b_vars.e2 > -b_vars.dy)
+{
+    b_vars.err -= b_vars.dy;
+    a.x += b_vars.sx;
+}
+</pre>
+
+- Se o erro acumulado é grande o suficiente, significa que a linha está “descendo muito devagar”.
+- Então, avançamos no eixo X para nos manter próximos da linha ideal.
+- E ajustamos o erro, subtraindo dy, para refletir o movimento.
+- sx pode ser 1 (direita) ou -1 (esquerda), dependendo da direção da linha.
+
+### 🔹 Segundo if: decide se deve mover em Y
+<pre>
+   if (b_vars.e2 < b_vars.dx)
+{
+    b_vars.err += b_vars.dx;
+    a.y += b_vars.sy;
+}
+</pre>
+- Se o erro acumulado indica que estamos "subindo ou descendo pouco", então é hora de mover também em Y.
+- Movemos a.y na direção correta (sy = 1 ou -1), e corrigimos o erro somando dx.
+
+-> Exemplo prático:
+
+Imagine que você quer desenhar uma linha de (0, 0) até (5, 3)
+
+Você quer chegar em (5,3), mas só pode andar 1 pixel por vez.
+
+Às vezes, andar só em X não te aproxima da linha real. Então o erro te diz: "Ei, você precisa subir um pouco agora!"
+
+Esse erro acumulado não é exato, mas dá boas decisões de quando subir ou seguir reto — é isso que faz o algoritmo funcionar tão bem com números inteiros.
