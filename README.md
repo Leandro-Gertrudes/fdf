@@ -14,14 +14,14 @@ FdF (Fil de Fer) é um projeto da escola 42 cujo objetivo é criar um programa c
 
 A proposta é transformar arquivos .fdf contendo uma malha de pontos 3D (com valores de altura) em uma representação visual em 2D, aplicando projeções matemáticas para simular uma visualização tridimensional.
 
-O projeto desafia o aluno a trabalhar com manipulação de arquivos, algoritmos gráficos clássicos (como o de Bresenham), projeções 3D (como a isométrica) e o uso da MinilibX, uma pequena biblioteca gráfica fornecida pela 42
+O projeto desafia o aluno a trabalhar com manipulação de arquivos, algoritmos gráficos clássicos (como o de Bresenham), projeções 3D (como a isométrica) e o uso da MinilibX, a biblioteca gráfica fornecida pela 42
 
 Um deleite para os amantes de matemarica e geometria espacial :D
 
 # Projeção
 
    O que é uma projeção?
-   Uma projeção é o processo matemático de representar um objeto tridimensional (3D) em uma superfície bidimensional (2D), como a tela do computador. Como a tela não tem profundidade real, precisamos simular a noção de profundidade e volume usando técnicas de projeção.
+   Uma projeção é uma forma de representar um objeto tridimensional (3D) em uma superfície bidimensional (2D), como a tela do computador. Como a tela não tem profundidade real, precisamos simular a noção de profundidade e volume usando técnicas de projeção.
    
    A ideia central da projeção é traduzir um espaço com dimenções 'X 'Y 'Z em uma imagem 2D com dimenções 'Y 'X sem perder completamente a percepção de forma, altura e posição dos objetos. 
    
