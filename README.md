@@ -6,7 +6,8 @@ Projeto da 42 para exibir mapas 3D em wireframe usando gráficos 2D.
 
 1. [Sobre o Projeto](#sobre-o-projeto)  
 2. [Projeção](#projeção)    
-3. [Algoritmo de Bresenham](#algoritmo-de-bresenham)  
+3. [Algoritmo de Bresenham](#algoritmo-de-bresenham)
+4. [Extra](#Extra) 
 
 # Sobre o Projeto
 
@@ -60,6 +61,12 @@ Software CAD
 
 
    Uma forma especial de projeção paralela em que os três eixos (x, y, z) são mostrados com o mesmo peso visual normalmente em ângulos de 30° ou 120° entre si. Mantém as proporções e dá uma ilusão de profundidade.
+
+Representado pela fórmula
+   <pre>
+x' = (x - y) · cos(30º)  
+y' = (x + y) · sin(3θº) - z // subtrai Z pois na MLX a linha sobe de maneira inversamente proporcional ao valor de Y, originalmente seria + Z
+</pre>
    
    Exemplos reais:
    
@@ -85,6 +92,12 @@ Jogo Hades
 ### 🔹 Projeção perspectiva
 
    Os “raios” convergem em um ponto de fuga. Objetos mais distantes parecem menores como vemos no mundo real. Isso cria uma sensação forte de profundidade.
+
+Representado pela fórmula
+   <pre>
+x' = x · (d / (d + z))  // A fórmula alterada pois na MLX o Y é invertido (quanto maior mais baixo)
+y' = y · (d / (d + z))
+</pre>
    
    Exemplos reais:
    
@@ -238,3 +251,29 @@ Você quer chegar em (5,3), mas só pode andar 1 pixel por vez.
 Às vezes, andar só em X não te aproxima da linha real. Então o erro te diz: "Ei, você precisa subir um pouco agora!"
 
 Esse erro acumulado não é exato, mas dá boas decisões de quando subir ou seguir reto — é isso que faz o algoritmo funcionar tão bem com números inteiros.
+
+# Extra
+
+Afim de ganhar pontos extras, o enunciado permitia que o aluno implementasse qualquer melhoria no projeto.
+Eu implementei a pintura das faces do mapa, ao apertar T o mapa se pinta sozinho com ou sem cor, de acordo com a preferencia do usuário.
+
+Para este fim, eu dividi cortei os quadrados ao meio em dois triângulos e eu usei o método das coordenadas baricêntricas, uma fórmula(outra, rs) que determina se um ponto está ou nao dentro de um triangulo, desta forma eu sei quais pixeis pintar.
+Por que triàngulos? Porquê na eles sempre serão planos graficamente, o que torna a pintura mais fácil no código. Já os quadriláteros podem ser "dobrados" no espaço tridimencional, e pintar isso seria chato.
+
+Vamos entender como isso funciona
+
+Primeiro eu pego um quadrilátero do mapa e declaro suas declaro suas vertices como pontos A B C D, com elas eu tenho dois triangulos, um com ABC e outro ACD.
+
+Agora que tenho dois triangulos, vou tratar um de cada vez.
+
+Segue a fórmula
+
+Mais precisamente, a fórmula nos diz se um ponto está à esquerda (resultado negativo) ou à direita (resultado positivo) de uma reta.
+No nosso caso, a direção das retas (sentido dos vetores dos lados do triângulo) é tal que, se um ponto estiver dentro do triângulo, ele estará à esquerda de todas as arestas.
+Isso significa que os três cálculos feitos com a fórmula devem retornar valores negativos ou zero.
+
+Se isso acontecer, sabemos que o ponto está dentro do triângulo, e então podemos pintar esse pixel com a cor desejada.
+
+Em resumo: para que um ponto seja considerado interno, todos os sinais devem ser negativos (ou zero). O valor zero significa que o ponto está exatamente sobre uma das arestas, o que também é aceitável.
+
+resultado final
