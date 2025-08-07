@@ -219,7 +219,7 @@ Press **ESC** to exit.
 
 Thanks for reading!
 
---
+---
 ### Português
 
 # 🗺️ FdF - Fil de Fer
