@@ -7,7 +7,8 @@ Projeto da 42 para exibir mapas 3D em wireframe usando gráficos 2D.
 1. [Sobre o Projeto](#sobre-o-projeto)  
 2. [Projeção](#projeção)    
 3. [Algoritmo de Bresenham](#algoritmo-de-bresenham)
-4. [Extra](#Extra) 
+4. [Extra](#Extra)
+5. [How to use](#How-to-use)
 
 # Sobre o Projeto
 
@@ -81,11 +82,14 @@ y' = (x + y) · sin(3θº) - z // subtrai Z pois na MLX a linha sobe de maneira 
    Diablo II
    
    RollerCoaster Tycoon
-   
+
+### Programa funcionando em isométrica
+
+![isometric](/.images/isometric.png)
+
+Agora um exemplo real com o jogo Hades
 
 ![jogo-Hades](https://www.numerama.com/wp-content/uploads/2021/08/73b6c0aa-d0a3-4cfb-b9cd-48a97525a186.jpg)
-
-Jogo Hades
 
 ---
 
@@ -113,9 +117,14 @@ y' = y · (d / (d + z))
    
    Qualquer jogo 3D em primeira ou terceira pessoa moderna, como Fortnite, GTA V, The Witcher 3
 
-![csgo](https://i.pcmag.com/imagery/reviews/03aaBruU4YchhD6MkESCRns-6.fit_lim.size_925x520.v_1569469925.png)
+### Programa funcionando em perspectiva
 
-Counter Striker Global Offensive
+![perspective](/.images/perspective.png)
+
+Exemplo real: Counter Striker Global Offensive
+
+Note o afunilamento das retas no chão e a diferença de uma mesma caixa vista por diferentes distâncias
+![csgo](/.images/csgo.png)
 
 # Algoritmo de Bresenham
 
@@ -268,6 +277,8 @@ Agora que tenho dois triangulos, vou tratar um de cada vez.
 
 Segue a fórmula
 
+![formula](/.images/Formula.png)]
+
 Mais precisamente, a fórmula nos diz se um ponto está à esquerda (resultado negativo) ou à direita (resultado positivo) de uma reta.
 No nosso caso, a direção das retas (sentido dos vetores dos lados do triângulo) é tal que, se um ponto estiver dentro do triângulo, ele estará à esquerda de todas as arestas.
 Isso significa que os três cálculos feitos com a fórmula devem retornar valores negativos ou zero.
@@ -276,4 +287,31 @@ Se isso acontecer, sabemos que o ponto está dentro do triângulo, e então pode
 
 Em resumo: para que um ponto seja considerado interno, todos os sinais devem ser negativos (ou zero). O valor zero significa que o ponto está exatamente sobre uma das arestas, o que também é aceitável.
 
-resultado final
+resultado final com o preenchimento ativado
+
+![fill](/.images/fill.png)
+
+# How to use
+
+Requisitos:
+- Sistema linux
+- compilador gcc
+
+###  Compilando o projeto
+No terminal, dentro da pasta do projeto:
+```
+Make
+```
+
+### executando
+Para rodar o programa com um arquivo fdf use
+```
+./fdf maps/42.fdf
+```
+Substitua maps/42.fdf pelo caminho do seu arquivo .fdf.
+
+Os comandos apararecerão na tela.
+
+Quando quiser sair aperte ESQ
+
+Obrigado!
