@@ -10,7 +10,7 @@ A 42 project to render 3D maps in wireframe using 2D graphics.
 4. [Extra](#extra)
 5. [How to Use](#how-to-use)
 
-Para ler em Português, [clique aqui](#pt-br)
+Para ler em Português, [clique aqui](#português)
 
 # About the Project
 
@@ -83,7 +83,9 @@ Hades gameplay example:
 
 ### 🔹 Perspective Projection
 
-Here, the rays converge toward a vanishing point. Objects farther away appear smaller, creating a more realistic depth.
+In perspective projection, parallel lines converge toward the vanishing point. Lines that are parallel in reality (like train tracks) appear to meet at a distant point, called the vanishing point.
+Additionally, objects appear larger when they are closer to the viewer, and smaller as they move farther away.
+This technique makes drawings more realistic and closer to how we perceive the world.
 
 **Formula:**
 ```
@@ -218,7 +220,7 @@ Press **ESC** to exit.
 Thanks for reading!
 
 --
-### pt-br
+### Português
 
 # 🗺️ FdF - Fil de Fer
 
@@ -317,7 +319,10 @@ Agora um exemplo real com o jogo Hades
 
 ### 🔹 Projeção perspectiva
 
-   Os “raios” convergem em um ponto de fuga. Objetos mais distantes parecem menores como vemos no mundo real. Isso cria uma sensação forte de profundidade.
+Na projeção em perspectiva, as linhas paralelas convergem para o ponto de fuga. Linhas que são paralelas na realidade (como trilhos de trem) parecem se encontrar em um ponto distante, chamado ponto de fuga.
+Também, os objetos ficam maiores quanto mais "próximos" da tela, e menores à medida que se distanciam.
+Essa técnica torna os desenhos mais realistas e próximos da forma como enxergamos o mundo.
+
 
 Representado pela fórmula
    <pre>
