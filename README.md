@@ -1,3 +1,225 @@
+
+# 🗺️ FdF - Fil de Fer
+A 42 project to render 3D maps in wireframe using 2D graphics.
+
+## Table of Contents
+
+1. [About the Project](#about-the-project)  
+2. [Projection](#projection)    
+3. [Bresenham's Algorithm](#bresenhams-algorithm)
+4. [Extra](#extra)
+5. [How to Use](#how-to-use)
+
+Para ler em Português, [clique aqui](#pt-br)
+
+# About the Project
+
+FdF (Fil de Fer) is a project from 42 School where the goal is to create a program capable of displaying 3D height maps in a 2D window using a wireframe representation.
+
+It takes `.fdf` files — which contain a grid of points with height values — and converts them into a 2D visual using mathematical projections to simulate a 3D view.
+
+This project challenges students to work with file parsing, classic computer graphics algorithms (like Bresenham’s), 3D projections (such as isometric), and the MiniLibX, the lightweight graphics library provided by 42.
+
+A real treat for math and geometry enthusiasts 😄
+
+# Projection
+
+What is a projection?  
+A projection is a way to represent a 3D object on a 2D surface, like a computer screen. Since screens have no real depth, we simulate the illusion of volume using projection techniques.
+
+The idea is to transform a space defined by dimensions `X Y Z` into a 2D image with dimensions `X Y`, while still preserving the perception of height and shape.
+
+Think of holding a cube near a wall with the sun casting a shadow. That shadow is a projection — a 2D representation of a 3D object — and its shape depends on the angle and position of the cube.
+
+There are a few types of projections:
+
+### 🔹 Parallel Projection
+
+The projection “rays” are parallel. Objects maintain their relative size regardless of distance. This type of projection is used when shape and proportion accuracy is more important than realistic depth.
+
+**Examples:**
+- Engineering blueprints
+- CAD software (AutoCAD, SolidWorks)
+- Grid-based games (e.g., Civilization II)
+- Age of Empires II
+- Stardew Valley (uses orthographic projection)
+
+Visual example:
+
+![image](https://jonatasalexandre.com.br/wp-content/uploads/2021/04/projeto-spda-dwg.jpg)
+
+---
+
+### 🔹 Isometric Projection  
+*(A type of parallel projection)*
+
+In isometric projection, all three axes (x, y, z) are displayed at equal angles (typically 30° or 120°), giving the illusion of depth while preserving proportions.
+
+**Formula:**
+```
+x' = (x - y) · cos(30°)  
+y' = (x + y) · sin(30°) - z
+```
+
+The `-z` is used because in MiniLibX the Y axis grows downward.
+
+**Examples:**
+- IKEA manuals
+- Tactical RPGs
+- Hades
+- SimCity 2000
+- Diablo II
+- RollerCoaster Tycoon
+
+**Example running in isometric mode:**
+
+![isometric](/.images/isometric.png)
+
+Hades gameplay example:
+
+![hades](https://www.numerama.com/wp-content/uploads/2021/08/73b6c0aa-d0a3-4cfb-b9cd-48a97525a186.jpg)
+
+---
+
+### 🔹 Perspective Projection
+
+Here, the rays converge toward a vanishing point. Objects farther away appear smaller, creating a more realistic depth.
+
+**Formula:**
+```
+x' = x · (d / (d + z))  
+y' = y · (d / (d + z))
+```
+
+**Examples:**
+- Photography
+- Renaissance art
+- Film scenes
+- Minecraft
+- The Legend of Zelda: BOTW
+- First/third-person games like Fortnite or GTA V
+
+**Example running in perspective mode:**
+
+![perspective](/.images/perspective.png)
+
+Real-world example: Counter Strike Global Offensive  
+Note the vanishing lines and box sizes.
+
+![csgo](/.images/csgo.png)
+
+# Bresenham's Algorithm
+
+Bresenham’s Algorithm is a method to draw straight lines between two points on a grid of pixels using only integer math.
+
+Each step decides which pixel to draw next, avoiding floating-point operations. It determines whether to move horizontally (x), vertically (y), or both to stay close to the ideal line.
+
+**Example:**
+
+![bresenham](https://www.middle-engine.com/images/2020-07-28-bresenhams-line-algorithm/03_bresenham-12x12-example.gif)
+
+### Initialization
+
+```c
+void init_bresenham(t_bresenham *b, t_point a, t_point b_point)
+{
+    b->dx = abs(b_point.x - a.x);
+    b->dy = abs(b_point.y - a.y);
+    b->sx = direction(a.x, b_point.x);
+    b->sy = direction(a.y, b_point.y);
+    b->err = b->dx - b->dy;
+}
+```
+
+**Key variables:**
+- `dx`: horizontal distance between points
+- `dy`: vertical distance
+- `sx`: direction along X (1 or -1)
+- `sy`: direction along Y (1 or -1)
+- `err`: accumulated error, helps determine when to move vertically
+
+### Line Drawing Logic
+
+```c
+b_vars.e2 = 2 * b_vars.err;
+if (b_vars.e2 > -b_vars.dy) {
+    b_vars.err -= b_vars.dy;
+    a.x += b_vars.sx;
+}
+if (b_vars.e2 < b_vars.dx) {
+    b_vars.err += b_vars.dx;
+    a.y += b_vars.sy;
+}
+```
+
+This allows you to plot an approximate line using only integers — ideal for pixel displays.
+
+Imagine drawing from `(0, 0)` to `(5, 3)`. Bresenham's logic tells you when to move up or keep drawing horizontally to stay close to the true line.
+
+# Extra
+
+To earn bonus points, I added a feature that fills the mesh faces with color.  
+Pressing **T** enables or disables face coloring.
+
+To do this, I split each quad into two triangles and used **barycentric coordinates** — a method that determines whether a point is inside a triangle.
+
+Why triangles?  
+Because triangles are always planar, which simplifies filling. Quads, in 3D, can become twisted or non-planar.
+
+---
+
+Given a quad with vertices A, B, C, D:
+
+- Form triangles ABC and ACD
+- Loop over the bounding box of the triangle
+- Use the barycentric formula to check if a point lies inside
+
+**Formula:**
+
+![formula](/.images/Formula.png)
+
+The formula checks whether a point lies to the left or right of a line.
+
+In our case, if a point is on the **left side** (i.e., all results negative or zero) for each of the triangle’s edges, then it's inside the triangle.
+
+So if all three edge checks return negative (or zero), we fill that pixel.
+
+**Final result with filling enabled:**
+
+![fill](/.images/fill.png)
+
+# How to Use
+
+### Requirements
+- Linux system
+- GCC compiler
+
+### Compiling
+
+Run the following in the project directory:
+
+```
+make
+```
+
+### Running
+
+To launch the program with an `.fdf` file:
+
+```
+./fdf maps/42.fdf
+```
+
+Replace `maps/42.fdf` with the path to your own `.fdf` file.
+
+Instructions will appear on screen.  
+Press **ESC** to exit.
+
+Thanks for reading!
+
+--
+### pt-br
+
 # 🗺️ FdF - Fil de Fer
 
 Projeto da 42 para exibir mapas 3D em wireframe usando gráficos 2D.
